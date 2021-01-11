@@ -261,7 +261,8 @@ var (
 	// RightToTreatmentsColumns holds the columns for the "right_to_treatments" table.
 	RightToTreatmentsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "addedtime", Type: field.TypeTime},
+		{Name: "starttime", Type: field.TypeTime},
+		{Name: "endtime", Type: field.TypeTime},
 		{Name: "hospital_hospital", Type: field.TypeInt, Nullable: true},
 		{Name: "patient_patient_to_right_to_treatment", Type: field.TypeInt, Nullable: true},
 		{Name: "right_to_treatment_type_type", Type: field.TypeInt, Nullable: true},
@@ -274,21 +275,21 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:  "right_to_treatments_hospitals_hospital",
-				Columns: []*schema.Column{RightToTreatmentsColumns[2]},
+				Columns: []*schema.Column{RightToTreatmentsColumns[3]},
 
 				RefColumns: []*schema.Column{HospitalsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "right_to_treatments_patients_PatientToRightToTreatment",
-				Columns: []*schema.Column{RightToTreatmentsColumns[3]},
+				Columns: []*schema.Column{RightToTreatmentsColumns[4]},
 
 				RefColumns: []*schema.Column{PatientsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:  "right_to_treatments_right_to_treatment_types_type",
-				Columns: []*schema.Column{RightToTreatmentsColumns[4]},
+				Columns: []*schema.Column{RightToTreatmentsColumns[5]},
 
 				RefColumns: []*schema.Column{RightToTreatmentTypesColumns[0]},
 				OnDelete:   schema.SetNull,

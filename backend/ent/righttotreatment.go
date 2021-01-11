@@ -19,8 +19,10 @@ type RightToTreatment struct {
 	config `json:"-"`
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
-	// Addedtime holds the value of the "Addedtime" field.
-	Addedtime time.Time `json:"Addedtime,omitempty"`
+	// Starttime holds the value of the "Starttime" field.
+	Starttime time.Time `json:"Starttime,omitempty"`
+	// Endtime holds the value of the "Endtime" field.
+	Endtime time.Time `json:"Endtime,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the RightToTreatmentQuery when eager-loading is set.
 	Edges                                 RightToTreatmentEdges `json:"edges"`
@@ -91,7 +93,7 @@ func (*RightToTreatment) scanValues(columns []string) ([]interface{}, error) {
 		switch columns[i] {
 		case righttotreatment.FieldID:
 			values[i] = &sql.NullInt64{}
-		case righttotreatment.FieldAddedtime:
+		case righttotreatment.FieldStarttime, righttotreatment.FieldEndtime:
 			values[i] = &sql.NullTime{}
 		case righttotreatment.ForeignKeys[0]: // hospital_hospital
 			values[i] = &sql.NullInt64{}
@@ -120,11 +122,17 @@ func (rtt *RightToTreatment) assignValues(columns []string, values []interface{}
 				return fmt.Errorf("unexpected type %T for field id", value)
 			}
 			rtt.ID = int(value.Int64)
-		case righttotreatment.FieldAddedtime:
+		case righttotreatment.FieldStarttime:
 			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field Addedtime", values[i])
+				return fmt.Errorf("unexpected type %T for field Starttime", values[i])
 			} else if value.Valid {
-				rtt.Addedtime = value.Time
+				rtt.Starttime = value.Time
+			}
+		case righttotreatment.FieldEndtime:
+			if value, ok := values[i].(*sql.NullTime); !ok {
+				return fmt.Errorf("unexpected type %T for field Endtime", values[i])
+			} else if value.Valid {
+				rtt.Endtime = value.Time
 			}
 		case righttotreatment.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -190,8 +198,10 @@ func (rtt *RightToTreatment) String() string {
 	var builder strings.Builder
 	builder.WriteString("RightToTreatment(")
 	builder.WriteString(fmt.Sprintf("id=%v", rtt.ID))
-	builder.WriteString(", Addedtime=")
-	builder.WriteString(rtt.Addedtime.Format(time.ANSIC))
+	builder.WriteString(", Starttime=")
+	builder.WriteString(rtt.Starttime.Format(time.ANSIC))
+	builder.WriteString(", Endtime=")
+	builder.WriteString(rtt.Endtime.Format(time.ANSIC))
 	builder.WriteByte(')')
 	return builder.String()
 }
